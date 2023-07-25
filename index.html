@@ -1,0 +1,421 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+    integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+    crossorigin="anonymous"></script>
+<style>
+        h1 {
+      text-align: center;
+    }
+
+    form {
+      display: grid;
+      gap: 10px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select {
+      padding: 5px;
+      font-size: 16px;
+    }
+
+
+    h2 {
+      margin-top: 30px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+    textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+button {
+    background-color: #007BFF;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+p {
+    margin-top: 10px;
+}
+        label {
+            font-weight: bold;
+        }
+</style>
+
+<div class="accordion" id="accordionExample">
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                aria-expanded="true" aria-controls="collapseOne">
+                학점 계산기
+            </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <label for="gradeSystem">학점 기준:</label>
+                <select id="gradeSystem" onchange="updateGradeOptions()" required>
+                    <option value="4.5">4.5 만점</option>
+                    <option value="4.3">4.3 만점</option>
+                </select><br>
+                <hr>
+                <form id="gradeCalculatorForm">
+                    <label for="subjectName">과목 이름:</label>
+                    <input type="text" id="subjectName" required><br>
+                    <label for="credit">이수 학점:</label>
+                    <input type="number" id="credit" required><br>
+                    <label for="grade">성적:</label>
+                    <select id="grade" required>
+                        <!-- 초기에는 4.5 만점 기준의 학점 목록을 보여줍니다. -->
+                        <option value="4.5">A+: 4.5</option>
+                        <option value="4.0">A: 4.0</option>
+                        <option value="3.5">B+: 3.5</option>
+                        <option value="3.0">B: 3.0</option>
+                        <option value="2.5">C+: 2.5</option>
+                        <option value="2.0">C: 2.0</option>
+                        <option value="1.5">D+: 1.5</option>
+                        <option value="1.0">D: 1.0</option>
+                        <option value="0.0">F: 0.0</option>
+                    </select><br>
+                    <button type="button" onclick="calculateGrade()">추가</button>
+                </form>
+
+                <h2>입력한 과목</h2>
+                <ul id="subjectList" style="height: 100px; overflow: auto;"></ul>
+
+                <h2>총 학점</h2>
+                <p id="totalCredits">0</p>
+
+                <h2>평균 성적</h2>
+                <p id="averageGrade">F: 0.0</p>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                글자 수 세기
+            </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <textarea id="textArea" rows="4" cols="50"></textarea>
+                <br>
+                <input type="checkbox" id="includeSpaces" checked>
+                <label for="includeSpaces">공백 포함</label>
+                <br>
+                <button onclick="countCharacters()">글자 수 세기</button>
+                <p>결과: <span id="text_result">0</span> 글자</p>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                연봉 실수령액 계산기
+            </button>
+        </h2>
+        <div id="collapseThree" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <div>
+                    <label for="input-actual-annual-salary-table-salary">연봉 선택: </label>
+                    <select class="form-select" id="input-actual-annual-salary-table-salary">
+                        <option value="10000000">10,000,000원</option>
+                        <option value="11000000">11,000,000원</option>
+                        <option value="12000000">12,000,000원</option>
+                        <option value="13000000">13,000,000원</option>
+                        <option value="14000000">14,000,000원</option>
+                        <option value="15000000">15,000,000원</option>
+                        <option value="16000000">16,000,000원</option>
+                        <option value="17000000">17,000,000원</option>
+                        <option value="18000000">18,000,000원</option>
+                        <option value="19000000">19,000,000원</option>
+                        <option value="20000000">20,000,000원</option>
+                        <option value="21000000">21,000,000원</option>
+                        <option value="22000000">22,000,000원</option>
+                        <option value="23000000">23,000,000원</option>
+                        <option value="24000000">24,000,000원</option>
+                        <option value="25000000">25,000,000원</option>
+                        <option value="26000000">26,000,000원</option>
+                        <option value="27000000">27,000,000원</option>
+                        <option value="28000000">28,000,000원</option>
+                        <option value="29000000">29,000,000원</option>
+                        <option value="30000000">30,000,000원</option>
+                        <option value="31000000">31,000,000원</option>
+                        <option value="32000000">32,000,000원</option>
+                        <option value="33000000">33,000,000원</option>
+                        <option value="34000000">34,000,000원</option>
+                        <option value="35000000">35,000,000원</option>
+                        <option value="36000000">36,000,000원</option>
+                        <option value="37000000">37,000,000원</option>
+                        <option value="38000000">38,000,000원</option>
+                        <option value="39000000">39,000,000원</option>
+                        <option value="40000000">40,000,000원</option>
+                        <option value="41000000">41,000,000원</option>
+                        <option value="42000000">42,000,000원</option>
+                        <option value="43000000">43,000,000원</option>
+                        <option value="44000000">44,000,000원</option>
+                        <option value="45000000">45,000,000원</option>
+                        <option value="46000000">46,000,000원</option>
+                        <option value="47000000">47,000,000원</option>
+                        <option value="48000000">48,000,000원</option>
+                        <option value="49000000">49,000,000원</option>
+                        <option value="50000000">50,000,000원</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button onclick="displayActualSalaryAndDeduction()">계산</button>
+                </div>
+
+                <div id="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-item">
+        <h2 class="accordion-header">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse4" aria-expanded="false" aria-controls="collapse4">
+                한영 번역기
+            </button>
+        </h2>
+        <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+            <iframe src="https://kminvis2.pythonanywhere.com/trans" width="100%" height="300px"></iframe>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // 입력한 과목 정보를 저장할 배열
+    let subjects = [];
+
+    function updateGradeOptions() {
+        const gradeSystem = document.getElementById('gradeSystem').value;
+        const gradeSelect = document.getElementById('grade');
+
+        // 학점 선택 드롭다운 목록을 초기화합니다.
+        gradeSelect.innerHTML = '';
+
+        // 선택한 학점 기준에 따라 학점 목록을 생성합니다.
+        if (gradeSystem === '4.5') {
+            const grades = ['4.5', '4.0', '3.5', '3.0', '2.5', '2.0', '1.5', '1.0', '0.0'];
+            grades.forEach((grade) => {
+                const option = document.createElement('option');
+                option.value = grade;
+                option.textContent = `${convertToGrade(parseFloat(grade), gradeSystem)}: ${grade}`;
+                gradeSelect.appendChild(option);
+            });
+        } else if (gradeSystem === '4.3') {
+            const grades = ['4.3', '4.0', '3.7', '3.3', '3.0', '2.7', '2.3', '2.0', '1.7', '1.3', '1.0', '0.7', '0.0'];
+            grades.forEach((grade) => {
+                const option = document.createElement('option');
+                option.value = grade;
+                option.textContent = `${convertToGrade(parseFloat(grade), gradeSystem)}: ${grade}`;
+                gradeSelect.appendChild(option);
+            });
+        }
+    }
+
+    function convertToGrade(point, gradeSystem) {
+        if (gradeSystem === '4.5') {
+            if (point === 4.5) return 'A+';
+            if (point === 4.0) return 'A';
+            if (point === 3.5) return 'B+';
+            if (point === 3.0) return 'B';
+            if (point === 2.5) return 'C+';
+            if (point === 2.0) return 'C';
+            if (point === 1.5) return 'D+';
+            if (point === 1.0) return 'D';
+            if (point === 0.0) return 'F';
+        } else if (gradeSystem === '4.3') {
+            if (point === 4.3) return 'A+';
+            if (point === 4.0) return 'A';
+            if (point === 3.7) return 'A-';
+            if (point === 3.3) return 'B+';
+            if (point === 3.0) return 'B';
+            if (point === 2.7) return 'B-';
+            if (point === 2.3) return 'C+';
+            if (point === 2.0) return 'C';
+            if (point === 1.7) return 'C-';
+            if (point === 1.3) return 'D+';
+            if (point === 1.0) return 'D';
+            if (point === 0.7) return 'D-';
+            if (point === 0.0) return 'F';
+        }
+        return 'N/A';
+    }
+
+    function calculateGrade() {
+        const subjectName = document.getElementById('subjectName').value;
+        const credit = parseFloat(document.getElementById('credit').value);
+        const grade = parseFloat(document.getElementById('grade').value);
+        const gradeSystem = document.getElementById('gradeSystem').value;
+
+        // 입력값 유효성 검사
+        if (!subjectName || isNaN(credit) || isNaN(grade)) {
+            alert('모든 필드를 입력하세요.');
+            return;
+        }
+
+        // 과목 정보 객체 생성 및 배열에 추가
+        const subject = {
+            name: subjectName,
+            credit: credit,
+            point: grade
+        };
+        subjects.push(subject);
+
+        // 입력 필드 초기화
+        document.getElementById('subjectName').value = '';
+        document.getElementById('credit').value = '';
+        document.getElementById('grade').value = '';
+
+        // 학점 선택 드롭다운 목록 초기화
+        updateGradeOptions();
+
+        // 과목 리스트 업데이트
+        updateSubjectList();
+
+        // 총 학점 및 평균 성적 계산
+        calculateTotalCredits();
+        calculateAverageGrade();
+
+        function updateSubjectList() {
+            const subjectList = document.getElementById('subjectList');
+            subjectList.innerHTML = '';
+            subjects.forEach((subject) => {
+                const li = document.createElement('li');
+                li.textContent = `${subject.name} - ${subject.credit}학점 (${subject.point})`;
+                subjectList.appendChild(li);
+            });
+        }
+    }
+
+    function calculateTotalCredits() {
+        const totalCredits = subjects.reduce((sum, subject) => sum + subject.credit, 0);
+        document.getElementById('totalCredits').textContent = totalCredits;
+    }
+
+    function calculateAverageGrade() {
+        const totalGradePoints = subjects.reduce((sum, subject) => {
+            return sum + subject.point * subject.credit;
+        }, 0);
+
+        const averageGradePoint = totalGradePoints / parseFloat(document.getElementById('totalCredits').textContent);
+        document.getElementById('averageGrade').textContent = averageGradePoint.toFixed(2);
+    }
+
+    // 초기에는 4.5 만점 기준의 학점 목록을 보여줍니다.
+    updateGradeOptions();
+</script>
+
+<script>
+    function countCharacters() {
+        const textArea = document.getElementById("textArea").value;
+        const includeSpaces = document.getElementById("includeSpaces").checked;
+        let characterCount;
+
+        if (includeSpaces) {
+            characterCount = textArea.length;
+        } else {
+            characterCount = textArea.replace(/\s/g, "").length;
+        }
+
+        document.getElementById("text_result").innerText = characterCount;
+    }
+</script>
+
+<script>
+    function displayActualSalaryAndDeduction() {
+        const selectedSalary = parseInt(document.getElementById("input-actual-annual-salary-table-salary").value);
+
+        // 연봉과 해당 연봉에 대한 실수령액, 공제액 데이터를 객체로 정의합니다.
+        const salaryData = {
+            10000000: { actualSalary: 755013, deduction: 78320 },
+            11000000: { actualSalary: 830527, deduction: 86140 },
+            12000000: { actualSalary: 906010, deduction: 93990 },
+            13000000: { actualSalary: 980093, deduction: 103240 },
+            14000000: { actualSalary: 1054277, deduction: 112390 },
+            15000000: { actualSalary: 1128450, deduction: 121550 },
+            16000000: { actualSalary: 1202153, deduction: 131180 },
+            17000000: { actualSalary: 1275697, deduction: 140970 },
+            18000000: { actualSalary: 1349220, deduction: 150780 },
+            19000000: { actualSalary: 1422923, deduction: 160410 },
+            20000000: { actualSalary: 1496587, deduction: 170080 },
+            21000000: { actualSalary: 1570060, deduction: 179940 },
+            22000000: { actualSalary: 1643733, deduction: 189600 },
+            23000000: { actualSalary: 1717407, deduction: 199260 },
+            24000000: { actualSalary: 1790550, deduction: 209450 },
+            25000000: { actualSalary: 1863243, deduction: 220090 },
+            26000000: { actualSalary: 1935937, deduction: 230730 },
+            27000000: { actualSalary: 2008220, deduction: 241780 },
+            28000000: { actualSalary: 2080893, deduction: 252440 },
+            29000000: { actualSalary: 2153577, deduction: 263090 },
+            30000000: { actualSalary: 2225870, deduction: 274130 },
+            31000000: { actualSalary: 2298363, deduction: 284970 },
+            32000000: { actualSalary: 2370923, deduction: 294910 },
+            33000000: { actualSalary: 2443463, deduction: 310750 },
+            34000000: { actualSalary: 2516100, deduction: 320700 },
+            35000000: { actualSalary: 2588870, deduction: 331600 },
+            36000000: { actualSalary: 2661503, deduction: 346960 },
+            37000000: { actualSalary: 2734177, deduction: 363740 },
+            38000000: { actualSalary: 2806807, deduction: 379100 },
+            39000000: { actualSalary: 2879367, deduction: 394450 },
+            40000000: { actualSalary: 2951933, deduction: 410420 },
+            41000000: { actualSalary: 3024307, deduction: 429020 },
+            42000000: { actualSalary: 3095743, deduction: 447600 },
+            43000000: { actualSalary: 3166670, deduction: 468890 },
+            44000000: { actualSalary: 3238340, deduction: 487490 },
+            45000000: { actualSalary: 3308263, deduction: 506070 },
+            46000000: { actualSalary: 3378707, deduction: 520200 },
+            47000000: { actualSalary: 3449170, deduction: 538350 },
+            48000000: { actualSalary: 3519770, deduction: 555230 },
+            49000000: { actualSalary: 3590440, deduction: 574270 },
+            50000000: { actualSalary: 3660607, deduction: 591050 },
+        };
+
+        // 선택된 연봉에 해당하는 데이터를 가져옵니다.
+        const selectedData = salaryData[selectedSalary];
+
+        // 결과를 출력할 div를 가져옵니다.
+        const resultDiv = document.getElementById("result");
+
+        // 결과를 화면에 출력합니다.
+        resultDiv.innerHTML = `
+            <p>선택한 연봉: ${selectedSalary.toLocaleString()}원</p>
+            <p>실수령액: ${selectedData.actualSalary.toLocaleString()}원</p>
+            <p>공제합계: ${selectedData.deduction.toLocaleString()}원</p>
+        `;
+    }
+</script>
